@@ -6,7 +6,8 @@ Tracking the 4 GitHub issues that break down `PRD.md`. Updated as work lands.
       — live: https://flagdeck-eta.vercel.app (storage: Upstash for Redis via Vercel Marketplace, populates KV_REST_API_URL/TOKEN for @vercel/kv compat)
 - [x] **#2** API routes — GET/POST/PATCH/DELETE `/api/flags`, backed by Vercel KV, seed-data bootstrap
       — verified against real Redis: seed on empty GET, POST (+409 dup), PATCH (+404 missing), DELETE (+404 missing), 400 on bad key
-- [ ] **#3** Admin UI — flag list, toggle switches, add-flag form, delete, empty state, relative timestamps
+- [x] **#3** Admin UI — flag list, toggle switches, add-flag form, delete, empty state, relative timestamps
+      — verified in real browser: toggle, add (auto-slugified key), delete, refresh persistence all correct
 - [ ] **#4** Access gate + README + final deploy check — passcode gate, polish, README, verify live URL
 
 ## Notes
