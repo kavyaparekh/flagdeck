@@ -35,3 +35,6 @@ next-env.d.ts
 skills-lock.json
 AGENTS.md
 CLAUDE.md
+
+# internal planning doc — not for public repo (references outreach context)
+PRD.md

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { createFlag, getFlag, listFlags } from "@/lib/flags";
+import { hasValidPasscode } from "@/lib/auth";
 
 const createFlagSchema = z.object({
   key: z
@@ -18,6 +19,10 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
+  if (!hasValidPasscode(request)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const body = await request.json().catch(() => null);
   const parsed = createFlagSchema.safeParse(body);
 

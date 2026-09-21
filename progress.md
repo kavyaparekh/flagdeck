@@ -8,7 +8,8 @@ Tracking the 4 GitHub issues that break down `PRD.md`. Updated as work lands.
       — verified against real Redis: seed on empty GET, POST (+409 dup), PATCH (+404 missing), DELETE (+404 missing), 400 on bad key
 - [x] **#3** Admin UI — flag list, toggle switches, add-flag form, delete, empty state, relative timestamps
       — verified in real browser: toggle, add (auto-slugified key), delete, refresh persistence all correct
-- [ ] **#4** Access gate + README + final deploy check — passcode gate, polish, README, verify live URL
+- [x] **#4** Access gate + README + final deploy check — passcode gate, polish, README, verify live URL
+      — client-side gate + server-side 401 enforcement on POST/PATCH/DELETE, verified both paths
 
 ## Notes
 - Repo: `kavyaparekh/flagdeck` (public)

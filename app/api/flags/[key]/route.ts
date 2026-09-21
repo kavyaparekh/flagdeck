@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { deleteFlag, setFlagEnabled } from "@/lib/flags";
+import { hasValidPasscode } from "@/lib/auth";
 
 const patchFlagSchema = z.object({
   enabled: z.boolean(),
@@ -10,6 +11,10 @@ export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ key: string }> },
 ) {
+  if (!hasValidPasscode(request)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const { key } = await params;
   const body = await request.json().catch(() => null);
   const parsed = patchFlagSchema.safeParse(body);
@@ -30,9 +35,13 @@ export async function PATCH(
 }
 
 export async function DELETE(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ key: string }> },
 ) {
+  if (!hasValidPasscode(request)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const { key } = await params;
   const removed = await deleteFlag(key);
 

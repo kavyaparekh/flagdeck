@@ -4,8 +4,18 @@ import { useEffect, useState } from "react";
 import type { Flag } from "@/lib/types";
 import { FlagRow } from "@/components/FlagRow";
 import { AddFlagForm } from "@/components/AddFlagForm";
+import { PasscodeGate } from "@/components/PasscodeGate";
+import { getStoredPasscode, PASSCODE_HEADER } from "@/lib/passcode";
 
 export default function Home() {
+  return (
+    <PasscodeGate>
+      <FlagAdmin />
+    </PasscodeGate>
+  );
+}
+
+function FlagAdmin() {
   const [flags, setFlags] = useState<Flag[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [pendingKeys, setPendingKeys] = useState<Set<string>>(new Set());
@@ -42,7 +52,10 @@ export default function Home() {
   async function handleAdd(key: string, label: string): Promise<string | null> {
     const res = await fetch("/api/flags", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        [PASSCODE_HEADER]: getStoredPasscode() ?? "",
+      },
       body: JSON.stringify({ key, label }),
     });
 
@@ -68,7 +81,10 @@ export default function Home() {
     try {
       const res = await fetch(`/api/flags/${key}`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          [PASSCODE_HEADER]: getStoredPasscode() ?? "",
+        },
         body: JSON.stringify({ enabled }),
       });
       if (!res.ok) throw new Error();
@@ -90,7 +106,10 @@ export default function Home() {
     setFlags((prev) => prev?.filter((flag) => flag.key !== key) ?? prev);
 
     try {
-      const res = await fetch(`/api/flags/${key}`, { method: "DELETE" });
+      const res = await fetch(`/api/flags/${key}`, {
+        method: "DELETE",
+        headers: { [PASSCODE_HEADER]: getStoredPasscode() ?? "" },
+      });
       if (!res.ok) throw new Error();
     } catch {
       setFlags(snapshot);
